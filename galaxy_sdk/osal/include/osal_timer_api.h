@@ -1,0 +1,128 @@
+/*
+ * Copyright (c) 2025, VeriSilicon Holdings Co., Ltd. All rights reserved
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its contributors
+ * may be used to endorse or promote products derived from this software without
+ * specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#ifndef OSAL_TIMER_H
+#define OSAL_TIMER_H
+
+#include <stdint.h>
+#include <stdbool.h>
+#include "osal_define.h"
+
+/**
+ * @addtogroup OSAL_TIMER
+ * OSAL Timer API and definitions
+ * @ingroup OSAL
+ * @{
+ */
+
+typedef struct OsalTimer_st OsalTimer;
+
+/**
+ * @brief OSAL timer timeout callback function
+ * @param timer The timer itself
+ * @param param The param of timer timeout callback
+ */
+typedef void (*OsalTimerCallback)(OsalTimer *timer, void *param);
+
+/**
+ * @brief Create a timer
+ * @param timer The timer to be created
+ * @param name The name of timer
+ * @param period The period of timer, in millisecond
+ * @param auto_reload Is the count value automatically reloaded
+ * @param cb The timeout callback of timer
+ * @param param The param of timer timeout callback
+ * @return int OSAL_SUCCESS for success, others for failure
+ */
+int osal_timer_create(OsalTimer **timer, char *name, int period, bool auto_reload,
+                      OsalTimerCallback cb, void *param);
+
+/**
+ * @brief Delete a timer
+ *
+ * @param timer The timer being deleted
+ * @param timeout The maximum amount of wait time, in millisecond
+ * @return int OSAL_SUCCESS for success, others for failure
+ */
+int osal_timer_delete(OsalTimer *timer, uint32_t timeout);
+
+/**
+ * @brief Start a timer
+ *
+ * @param timer The timer being started
+ * @param timeout The maximum amount of wait time, in millisecond
+ * @return int OSAL_SUCCESS for success, others for failure
+ */
+int osal_timer_start(OsalTimer *timer, uint32_t timeout);
+
+/**
+ * @brief Start a timer from interrupt
+ *
+ * @param timer The timer being started
+ * @return int OSAL_SUCCESS for success, others for failure
+ */
+int osal_timer_start_isr(OsalTimer *timer);
+
+/**
+ * @brief Reset a timer
+ *
+ * @param timer The timer being reset
+ * @param timeout The maximum amount of wait time, in millisecond
+ * @return int OSAL_SUCCESS for success, others for failure
+ */
+int osal_timer_reset(OsalTimer *timer, uint32_t timeout);
+
+/**
+ * @brief Reset a timer from interrupt
+ *
+ * @param timer The timer being reset
+ * @return int OSAL_SUCCESS for success, others for failure
+ */
+int osal_timer_reset_isr(OsalTimer *timer);
+
+/**
+ * @brief Stop a timer
+ *
+ * @param timer The timer being stopped
+ * @param timeout The maximum amount of wait time, in millisecond
+ * @return int OSAL_SUCCESS for success, others for failure
+ */
+int osal_timer_stop(OsalTimer *timer, uint32_t timeout);
+
+/**
+ * @brief Stop a timer from interrupt
+ *
+ * @param timer The timer being stopped
+ * @return int OSAL_SUCCESS for success, others for failure
+ */
+int osal_timer_stop_isr(OsalTimer *timer);
+
+/** @} */
+
+#endif // OSAL_TIMER_H
